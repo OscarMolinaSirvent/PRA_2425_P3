@@ -13,14 +13,14 @@ class HashTable: public Dict<V> {
 
     private:
         int n, max;
-        ListLinked<TableEntry<V>>* table;
+        ListLinked<TableEntry<V>>** table; 
         int h(std::string key){
             int suma = 0;
             int ret = 0;
             for(int i = 0; i < key.size(); i++){
                 suma += int(key.at(i));
             }
-            return suma % table->size();
+            return suma % max;
         }
     public:
         HashTable(int size){
@@ -29,7 +29,7 @@ class HashTable: public Dict<V> {
             }
             n = 0;
             max = size;
-            table = new ListLinked<TableEntry<V>>**[size];
+            table = new ListLinked<TableEntry<V>>*[size];
             for(int i = 0; i < max; i++){
                 table[i] = new ListLinked<TableEntry<V>>();
             }
@@ -39,7 +39,7 @@ class HashTable: public Dict<V> {
             delete[] table;
         }
         
-        int capacity(){
+        int capacity() const{
             int n = 0;
             for(int i = 0; i < max; i++){
                 if(table[i] != nullptr){
@@ -68,7 +68,7 @@ class HashTable: public Dict<V> {
             if(position == -1){
                 throw std::runtime_error("No se pudo encontrar el key.");
             }else{
-                return table[index] -> get(position);
+                return table[index] -> get(position).value;
             }
         }
 
@@ -79,11 +79,14 @@ class HashTable: public Dict<V> {
             if(position == -1){
                 throw std::runtime_error("No se ha podido encontrar el par clave -> valor");
             }else{
+                V v;
+                v = table[index] -> get(position).value;
                 table[index] -> remove(position);
+                return v;
             }
         }
 
-        int entries(){
+        int entries() const override {
             return n;
         }
 
@@ -92,9 +95,11 @@ class HashTable: public Dict<V> {
             << std::endl;
             out << "==============" << std::endl;
             for(int i = 0; i < th.max ; i++){
-                out << "== Cubeta " << i << "==";
-                out << th.table[i] ;
+                out << "== Cubeta " << i << "==" << std::endl;
+                out << *th.table[i];
+                out << std::endl;
             }
+
             return out;
         }
 
