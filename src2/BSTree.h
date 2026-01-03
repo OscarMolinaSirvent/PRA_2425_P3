@@ -28,7 +28,7 @@ class BSTree {
 
         BSNode<T>* insert(BSNode<T>* n, T e){
             if(n == nullptr){
-                return new BSNode<T>*(e);
+                return new BSNode<T>(e);
             }
             else if(n->elem == e){
                 throw std::runtime_error("Elemento duplicado.");
@@ -39,7 +39,6 @@ class BSTree {
             else{
                 n->left = insert(n->left,e);
             }
-
             return n;
         }
 
@@ -96,6 +95,8 @@ class BSTree {
         }
 
         void delete_cascade(BSNode<T>* n){
+            if(n == nullptr) return;
+            
             delete_cascade(n->left);
             
             delete_cascade(n->right);
@@ -122,7 +123,8 @@ class BSTree {
         }
 
         void insert(T e){
-            insert(root,e);
+            root = insert(root,e);
+            nelem++;
         }
 
         friend std::ostream& operator<<(std::ostream &out, const BSTree<T> &bst){
@@ -132,6 +134,7 @@ class BSTree {
 
         void remove(T e){
             root = remove(root, e);
+            nelem--;
         }
         
         ~BSTree(){
