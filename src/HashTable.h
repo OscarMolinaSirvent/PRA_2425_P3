@@ -56,7 +56,7 @@ class HashTable: public Dict<V> {
             int position = table[index] -> search(insert);
             
             if(position == -1){
-                table[index] -> append(insert);
+                table[index] -> prepend(insert);
                 n++;
             }else{
                 throw std::runtime_error("La KEY ya existe.");
